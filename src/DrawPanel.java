@@ -1,18 +1,16 @@
 import javax.swing.*;
 
 import Drawers.BresenhamCircleDrawer;
-import Drawers.BresenhamLineDrawer;
 import Drawers.BufferedImagePixelDrawer;
 import Drawers.Interfaces.CircleDrawer;
 import Drawers.Interfaces.LineDrawer;
 import Drawers.Interfaces.PixelDrawer;
-import Drawers.Interfaces.WuLineDrawer;
+import Drawers.WuLineDrawer;
 import Math.*;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
