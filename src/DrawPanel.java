@@ -1,6 +1,7 @@
 import javax.swing.*;
 
 import Drawers.BresenhamCircleDrawer;
+import Drawers.BresenhamLineDrawer;
 import Drawers.BufferedImagePixelDrawer;
 import Drawers.Interfaces.CircleDrawer;
 import Drawers.Interfaces.LineDrawer;
@@ -34,7 +35,7 @@ public class DrawPanel extends JPanel {
         addMouseMotionListener(new MouseMotionListener() {
             @Override
             public void mouseDragged(MouseEvent e) {
-                if (active != null) {
+                if (SwingUtilities.isLeftMouseButton(e) && active != null) {
                     ScreenPoint sp = new ScreenPoint(e.getX(), e.getY());
                     RealPoint rp = sc.screenToReal(sp);
                     RealPoint center = active.getCenter();
@@ -79,6 +80,7 @@ public class DrawPanel extends JPanel {
             public void mousePressed(MouseEvent e) {
                 if (SwingUtilities.isRightMouseButton(e)) {
                     lastPoint = e.getPoint();
+                    System.out.println("right");
                 }
 
                 if (SwingUtilities.isLeftMouseButton(e)) {
@@ -131,8 +133,6 @@ public class DrawPanel extends JPanel {
             sc.setX(coef * sc.getX());
             sc.setY(coef * sc.getY());
             repaint();
-
-
         });
     }
 
@@ -151,7 +151,7 @@ public class DrawPanel extends JPanel {
         biG.fillRect(0, 0, getWidth(), getHeight());
 
         PixelDrawer pd = new BufferedImagePixelDrawer(bi);
-        LineDrawer ld = new WuLineDrawer(pd);
+        LineDrawer ld = new BresenhamLineDrawer(pd);
         CircleDrawer cd = new BresenhamCircleDrawer(pd, ld);
 
         drawAll(ld, cd);
