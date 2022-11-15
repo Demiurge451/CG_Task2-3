@@ -6,6 +6,7 @@ import Drawers.BufferedImagePixelDrawer;
 import Drawers.Interfaces.CircleDrawer;
 import Drawers.Interfaces.LineDrawer;
 import Drawers.Interfaces.PixelDrawer;
+import Drawers.Interfaces.WuLineDrawer;
 import Math.*;
 
 import java.awt.*;
@@ -18,7 +19,7 @@ import java.util.List;
 import util.*;
 
 public class DrawPanel extends JPanel {
-    private ScreenConverter sc;
+    private final ScreenConverter sc;
     private Point lastPoint;
     private Line ox, oy;
     private RealPoint start;
@@ -39,7 +40,7 @@ public class DrawPanel extends JPanel {
                     ScreenPoint sp = new ScreenPoint(e.getX(), e.getY());
                     RealPoint rp = sc.screenToReal(sp);
                     RealPoint center = active.getCenter();
-                    scalable = scalable == false ? findEdgeNear(rp, active) : true;
+                    scalable = !scalable ? findEdgeNear(rp, active) : true;
                     if (scalable) {
                         active.setRadius(distanceBetweenPoints(center.getX(), center.getY(), rp.getX(), rp.getY()));
                     } else {
@@ -152,7 +153,7 @@ public class DrawPanel extends JPanel {
         biG.fillRect(0, 0, getWidth(), getHeight());
 
         PixelDrawer pd = new BufferedImagePixelDrawer(bi);
-        LineDrawer ld = new BresenhamLineDrawer(pd);
+        LineDrawer ld = new WuLineDrawer(pd);
         CircleDrawer cd = new BresenhamCircleDrawer(pd, ld);
 
         drawAll(ld, cd);
@@ -161,8 +162,7 @@ public class DrawPanel extends JPanel {
     }
 
     private double distanceBetweenPoints(double x1, double y1, double x2, double y2) {
-        double c = Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
-        return c;
+        return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
     }
 
     private void drawAll(LineDrawer ld, CircleDrawer cd) {
