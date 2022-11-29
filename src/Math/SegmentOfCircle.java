@@ -45,7 +45,7 @@ public class SegmentOfCircle {
     }
 
     public void setStartAngle(double startAngle) {
-        this.startAngle = startAngle;
+        this.startAngle = Math.toRadians(startAngle);
     }
 
     public double getFinishAngle() {
@@ -53,6 +53,6 @@ public class SegmentOfCircle {
     }
 
     public void setFinishAngle(double finishAngle) {
-        this.finishAngle = finishAngle;
+        this.finishAngle = Math.toRadians(finishAngle);
     }
 }

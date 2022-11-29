@@ -14,10 +14,10 @@ public final class PositionPointOnSegment {
     }
 
     private static class Restriction {
-        private int leftX;
-        private int rightX;
-        private int bottomY;
-        private int topY;
+        private final int leftX;
+        private final int rightX;
+        private final int bottomY;
+        private final int topY;
 
         public Restriction(int leftX, int rightX, int bottomY, int topY) {
             this.leftX = leftX;
@@ -27,23 +27,16 @@ public final class PositionPointOnSegment {
         }
 
         private boolean checkRestrictions(int x, int y) {
-            if (leftX <= x && rightX >= x && bottomY <= y && topY >= y) {
-                return true;
-            }
-            return false;
+            return leftX <= x && rightX >= x && bottomY <= y && topY >= y;
         }
     }
 
 
 
     public static boolean isPointOnSegment(int x, int y, int x0, int y0, int radius, double startAngle, double finishAngle) {
-        if (isPointOnCircle(x, y, x0, y0, radius)
+        return isPointOnCircle(x, y, x0, y0, radius)
                 && isPointOnArc(x, y, x0, y0, radius, startAngle, finishAngle)
-                || isPointOnChord(x, y, x0, y0, radius, startAngle, finishAngle)
-        ) {
-           return true;
-        }
-        return false;
+                || isPointOnChord(x, y, x0, y0, radius, startAngle, finishAngle);
     }
 
     public static boolean isPointOnArc(int x, int y, int x0, int y0, int radius, double startAngle, double finishAngle) {
@@ -63,10 +56,10 @@ public final class PositionPointOnSegment {
 
     private static List<ScreenPoint> createEdges(int x0, int y0, int radius, double startAngle, double finishAngle) {
         List<ScreenPoint> edges = new ArrayList();
-        int x1 = (int) (Math.cos(Math.toRadians(startAngle)) * radius) + x0;
-        int y1 = (int) (Math.sin(Math.toRadians(startAngle)) * radius) + y0;
-        int x2 = (int) (Math.cos(Math.toRadians(finishAngle)) * radius) + x0;
-        int y2 = (int) (Math.sin(Math.toRadians(finishAngle)) * radius) + y0;
+        int x1 = (int) (Math.cos(startAngle) * radius) + x0;
+        int y1 = (int) (Math.sin(startAngle) * radius) + y0;
+        int x2 = (int) (Math.cos(finishAngle) * radius) + x0;
+        int y2 = (int) (Math.sin(finishAngle) * radius) + y0;
         ScreenPoint p1 = new ScreenPoint(x1, y1);
         ScreenPoint p2 = new ScreenPoint(x2, y2);
         edges.add(p1);
@@ -96,16 +89,17 @@ public final class PositionPointOnSegment {
         double maxAngle = Math.max(startAngle, finishAngle);
         List<Double> extremePoints = new ArrayList<>();
         extremePoints.add(minAngle);
-        for (int i = -360; i <= 360; i += 90) {
+        double turn = 2 * Math.PI;
+        for (double i = -turn; i - turn <= 1e-6; i += turn / 4) {
             if (i > minAngle && i < maxAngle) {
-                extremePoints.add((double)i);
+                extremePoints.add(i);
             }
         }
         extremePoints.add(maxAngle);
 
         for (int i = 0; i < extremePoints.size() - 1; i++) {
-            double angle1 = Math.toRadians(extremePoints.get(i));
-            double angle2 = Math.toRadians(extremePoints.get(i + 1));
+            double angle2 = extremePoints.get(i + 1);
+            double angle1 = extremePoints.get(i);
             int x1 = (int) (Math.cos(angle1) * radius) + x0;
             int x2 = (int) (Math.cos(angle2) * radius) + x0;
             int y1 = (int) (Math.sin(angle1) * radius) + y0;

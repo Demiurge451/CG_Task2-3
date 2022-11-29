@@ -6,15 +6,12 @@ import Drawers.Interfaces.LineDrawer;
 import Drawers.Interfaces.PixelDrawer;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 
-import Math.*;
 import util.*;
 
 public class BresenhamCircleDrawer implements CircleDrawer {
-    private PixelDrawer pd;
-    private LineDrawer ld;
+    private final PixelDrawer pd;
+    private final LineDrawer ld;
 
 
     public BresenhamCircleDrawer(PixelDrawer pd, LineDrawer ld) {
@@ -29,7 +26,7 @@ public class BresenhamCircleDrawer implements CircleDrawer {
         int delta = 1 - 2 * radius;
         int error;
 
-        if (Math.abs(startAngle - finishAngle) < 360) {
+        if (Math.abs(startAngle - finishAngle) < 2 * Math.PI) {
             drawChord(x0, y0, radius, startAngle, finishAngle, color);
         }
 
@@ -57,10 +54,10 @@ public class BresenhamCircleDrawer implements CircleDrawer {
     }
 
     private void drawChord(int x0, int y0, int radius, double startAngle, double finishAngle, Color color) {
-        int x1 = (int) (Math.cos(Math.toRadians(startAngle)) * radius) + x0;
-        int y1 = (int) (Math.sin(Math.toRadians(startAngle)) * radius) + y0;
-        int x2 = (int) (Math.cos(Math.toRadians(finishAngle)) * radius) + x0;
-        int y2 = (int) (Math.sin(Math.toRadians(finishAngle)) * radius) + y0;
+        int x1 = (int) (Math.cos(startAngle) * radius) + x0;
+        int y1 = (int) (Math.sin(startAngle) * radius) + y0;
+        int x2 = (int) (Math.cos(finishAngle) * radius) + x0;
+        int y2 = (int) (Math.sin(finishAngle) * radius) + y0;
         ld.drawLine(x1, y1, x2, y2, color);
     }
 

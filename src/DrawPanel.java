@@ -39,7 +39,7 @@ public class DrawPanel extends JPanel {
                     ScreenPoint sp = new ScreenPoint(e.getX(), e.getY());
                     RealPoint rp = sc.screenToReal(sp);
                     RealPoint center = active.getCenter();
-                    scalable = !scalable ? findEdgeNear(rp, active) : true;
+                    scalable = scalable || findEdgeNear(rp, active);
                     if (scalable) {
                         active.setRadius(distanceBetweenPoints(center.getX(), center.getY(), rp.getX(), rp.getY()));
                     } else {

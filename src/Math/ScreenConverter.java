@@ -31,14 +31,15 @@ public class ScreenConverter {
 
     public List<Double> convertAngles(double startAngle, double finishAngle) {
         List<Double> angles = new ArrayList<>();
-        if (Math.abs(startAngle - finishAngle) > 360) {
+        double turn = 2 * Math.PI;
+        if (Math.abs(startAngle - finishAngle) > turn) {
             angles.add(0d);
-            angles.add(360d);
+            angles.add(turn);
             return angles;
         }
-        int countTurn = Math.abs((int) Math.min(startAngle / 360, finishAngle / 360));
-        startAngle = startAngle > 360 ? startAngle - 360 * countTurn : startAngle + 360 * countTurn;
-        finishAngle = finishAngle > 360 ? finishAngle - 360 * countTurn : finishAngle + 360 * countTurn;
+        int countTurn = Math.abs((int) Math.min(startAngle / turn, finishAngle / turn));
+        startAngle = startAngle > turn ? startAngle - turn * countTurn : startAngle + turn * countTurn;
+        finishAngle = finishAngle > turn ? finishAngle - turn * countTurn : finishAngle + turn * countTurn;
         angles.add(-startAngle);
         angles.add(-finishAngle);
         return angles;
