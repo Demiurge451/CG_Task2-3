@@ -14,26 +14,38 @@ public class WuLineDrawer implements LineDrawer {
     }
 
     @Override
-    public void drawLine(int x0, int y0, int x1, int y1, Color c) {
-        boolean steep = Math.abs(y1 - y0) > Math.abs(x1- x0);
+    public void drawLine(int x1, int y1, int x2, int y2, Color c) {
+        boolean steep = Math.abs(y2 - y1) > Math.abs(x2- x1);
+        if (x1 == x2){
+            for (int i = Math.min(y2,y1); i <= Math.max(y2, y1) ; i++) {
+                plot(x1, i, 1, c);
+            }
+            return;
+        }
+        if (y1 == y2){
+            for (int i = Math.min(x2,x1); i <= Math.max(x2, x1) ; i++) {
+                plot(i, y1, 1, c);
+            }
+            return;
+        }
         if (steep){
-            int tmp = x0;
-            x0 = y0;
-            y0 = tmp;
-            tmp = x1;
+            int tmp = x1;
             x1 = y1;
             y1 = tmp;
+            tmp = x2;
+            x2 = y2;
+            y2 = tmp;
         }
-        if (x0 > x1){
-            int tmp = x0;
-            x0 = x1;
-            x1 = tmp;
-            tmp = y0;
-            y0 = y1;
-            y1 = tmp;
+        if (x1 > x2){
+            int tmp = x1;
+            x1 = x2;
+            x2 = tmp;
+            tmp = y1;
+            y1 = y2;
+            y2 = tmp;
         }
-        int dx = x1 - x0;
-        int dy = y1 - y0;
+        int dx = x2 - x1;
+        int dy = y2 - y1;
         double gradient;
         if (dx == 0){
             gradient = 1.0;
@@ -42,9 +54,9 @@ public class WuLineDrawer implements LineDrawer {
             gradient = (double) dy/ (double) dx;
         }
 
-        double xend = round(x0);
-        double yend = y0 + gradient * (xend - x0);
-        double xgap = rfpart(x0 + 0.5);
+        double xend = round(x1);
+        double yend = y1 + gradient * (xend - x1);
+        double xgap = rfpart(x1 + 0.5);
         double xpxl1 = xend;
         double ypxl1 = ipart(yend);
         if (steep){
@@ -56,9 +68,9 @@ public class WuLineDrawer implements LineDrawer {
             plot(xpxl1, ypxl1 + 1, fpart(yend) * xgap, c);
         }
         double intery = yend + gradient;
-        xend = round(x1);
-        yend = y1 + gradient * (xend - x1);
-        xgap = fpart(x1 + 0.5);
+        xend = round(x2);
+        yend = y2 + gradient * (xend - x2);
+        xgap = fpart(x2 + 0.5);
         double xpxl2 = xend;
         double ypxl2 = ipart(yend);
         if (steep){

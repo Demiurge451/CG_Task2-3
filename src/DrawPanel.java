@@ -151,7 +151,7 @@ public class DrawPanel extends JPanel {
         biG.fillRect(0, 0, getWidth(), getHeight());
 
         PixelDrawer pd = new BufferedImagePixelDrawer(bi);
-        LineDrawer ld = new BresenhamLineDrawer(pd);
+        LineDrawer ld = new WuLineDrawer(pd);
         CircleDrawer cd = new BresenhamCircleDrawer(pd, ld);
 
         drawAll(ld, cd);
@@ -222,6 +222,14 @@ public class DrawPanel extends JPanel {
 
     public SegmentOfCircle getCurSegment() {
         return curSegment;
+    }
+
+    public SegmentOfCircle getActive() {
+        return active;
+    }
+
+    public List<SegmentOfCircle> getSegments() {
+        return segments;
     }
 
     public void setSegments(List<SegmentOfCircle> segments) {

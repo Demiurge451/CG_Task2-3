@@ -45,26 +45,18 @@ public final class PositionPointOnSegment {
     }
 
     public static boolean isPointNearEdge(int x, int y, int x0, int y0, int radius, double startAngle, double finishAngle) {
-        List<ScreenPoint> edges = createEdges(x0, y0, radius, startAngle, finishAngle);
-        ScreenPoint p1 = edges.get(0);
-        ScreenPoint p2 = edges.get(1);
+        ScreenPoint p1 = createEdges(x0, y0, radius, startAngle);
+        ScreenPoint p2 = createEdges(x0, y0, radius, finishAngle);
         ScreenPoint cur = new ScreenPoint(x, y);
         int distance1 = distance(p1.getX(), p1.getY(), cur.getX(), cur.getY());
         int distance2 = distance(p2.getX(), p2.getY(), cur.getX(), cur.getY());
         return distance1 < eps || distance2 < eps;
     }
 
-    private static List<ScreenPoint> createEdges(int x0, int y0, int radius, double startAngle, double finishAngle) {
-        List<ScreenPoint> edges = new ArrayList();
-        int x1 = (int) (Math.cos(startAngle) * radius) + x0;
-        int y1 = (int) (Math.sin(startAngle) * radius) + y0;
-        int x2 = (int) (Math.cos(finishAngle) * radius) + x0;
-        int y2 = (int) (Math.sin(finishAngle) * radius) + y0;
-        ScreenPoint p1 = new ScreenPoint(x1, y1);
-        ScreenPoint p2 = new ScreenPoint(x2, y2);
-        edges.add(p1);
-        edges.add(p2);
-        return edges;
+    private static ScreenPoint createEdges(int x0, int y0, int radius, double angle) {
+        int x = (int) (Math.cos(angle) * radius) + x0;
+        int y = (int) (Math.sin(angle) * radius) + y0;
+        return new ScreenPoint(x, y);
     }
 
     private static int distance(int x1, int y1, int x2, int y2) {
@@ -72,9 +64,8 @@ public final class PositionPointOnSegment {
     }
 
     public static boolean isPointOnChord(int x, int y, int x0, int y0, int radius, double startAngle, double finishAngle) {
-        List<ScreenPoint> edges = createEdges(x0, y0, radius, startAngle, finishAngle);
-        ScreenPoint p1 = edges.get(0);
-        ScreenPoint p2 = edges.get(1);
+        ScreenPoint p1 = createEdges(x0, y0, radius, startAngle);
+        ScreenPoint p2 = createEdges(x0, y0, radius, finishAngle);
         ScreenPoint cur = new ScreenPoint(x, y);
         return PositionPointOnLine.isPointOnLine(p1, p2, cur);
     }

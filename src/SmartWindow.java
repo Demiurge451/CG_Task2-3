@@ -1,7 +1,7 @@
 import javax.swing.*;
+
 import Math.*;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 
@@ -14,6 +14,7 @@ public class SmartWindow extends JDialog {
     private JPanel panelMain;
     private DrawPanel drawPanel;
     private JButton buttonClear;
+    private JButton buttonDelete;
 
     public SmartWindow() {
         setContentPane(contentPane);
@@ -22,6 +23,9 @@ public class SmartWindow extends JDialog {
         buttonSet.addActionListener(e -> {
             updateParameters();
         });
+        buttonDelete.addActionListener(e ->{
+            delete();
+        });
         buttonClear.addActionListener(e -> {
             drawPanel.setSegments(new ArrayList<>());
             repaint();
@@ -29,10 +33,25 @@ public class SmartWindow extends JDialog {
     }
 
     private void updateParameters() {
+        SegmentOfCircle active = drawPanel.getActive();
+        if (active != null) {
+            active.setRadius(parseRadius(textFieldRadius.getText(), textFieldRadius));
+            active.setStartAngle(parseAngle(textFieldStartAngle.getText(), textFieldStartAngle));
+            active.setFinishAngle(parseAngle(textFieldFinishAngle.getText(), textFieldFinishAngle));
+        }
         SegmentOfCircle curSegment = drawPanel.getCurSegment();
         curSegment.setRadius(parseRadius(textFieldRadius.getText(), textFieldRadius));
         curSegment.setStartAngle(parseAngle(textFieldStartAngle.getText(), textFieldStartAngle));
         curSegment.setFinishAngle(parseAngle(textFieldFinishAngle.getText(), textFieldFinishAngle));
+        drawPanel.repaint();
+    }
+
+    private void delete() {
+        SegmentOfCircle active = drawPanel.getActive();
+        if (active != null) {
+            drawPanel.getSegments().remove(active);
+        }
+        drawPanel.repaint();
     }
 
     private int parseAngle(String s, JTextField textField) {
